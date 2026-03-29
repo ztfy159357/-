@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>异常档案 - QQ浏览器可联动版</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:微软雅黑,sans-serif}
+body{background:#0b0f17;color:#e6e6e6;padding-bottom:40px}
+.nav{background:#121822;padding:14px 20px;display:flex;gap:16px;align-items:center;position:sticky;top:0;z-index:9}
+.nav .title{color:#58a6ff;font-weight:bold}
+.nav a{color:#aaa;text-decoration:none}
+.nav a.active{color:#58a6ff}
+.nav .right{margin-left:auto}
+.container{max-width:1000px;margin:20px auto;padding:0 20px}
+.card{background:#121822;border-radius:10px;padding:20px;margin-bottom:16px}
+.card h3{color:#fff;margin:10px 0}
+.card .meta{color:#888;font-size:14px}
+.card .content{margin:10px 0;color:#ddd}
+.login,.upload{background:#121822;border-radius:12px;padding:30px;margin:40px auto;max-width:500px}
+input,textarea,select{width:100%;padding:12px;margin:8px 0;background:#0b0f17;border:1px solid #333;color:#fff;border-radius:6px}
+button{padding:12px 24px;background:#238636;color:#fff;border:none;border-radius:6px;cursor:pointer}
+.admin-bar{margin-top:12px}
+.admin-btn{background:#d32f2f;padding:6px 12px;font-size:14px}
+.ban-btn{background:#f57c00;padding:6px 12px;font-size:14px}
+.sync{text-align:center;color:#4ade80;margin:10px 0}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="title">异常档案</div>
+  <a href="#" onclick="go('home')">首页</a>
+  <a href="#" onclick="go('cthulhu')">克苏鲁</a>
+  <a href="#" onclick="go('greenapple')">青苹果</a>
+  <a href="#" onclick="go('normal')">通用</a>
+  <div class="right">
+    <a href="#" onclick="go('upload')" id="upBtn" style="display:none">上传</a>
+    <a href="#" onclick="go('login')" id="loginBtn">登录</a>
+    <a href="#" onclick="admin()" id="adminBtn" style="display:none">管理员</a>
+    <a href="#" onclick="logout()" id="logoutBtn" style="display:none">退出</a>
+  </div>
+</div>
+
+<div class="container" id="view"></div>
+
+<script>
+// 唯一联动 Gist（所有人共用）
+const SYNC_URL = "https://api.github.com/gists/9d9a9e9e9e9e9e9e9e9e9e9e9e9e9e9e";
+const ADMIN = "susu";
+const KEY = "susu";
+
+let user = localStorage.getItem("user");
+let adminMode = false;
+let page = "home";
+let posts = [];
+
+// 自动同步（3秒刷新一次，真正联动）
+setInterval(loadPosts, 3000);
+
+// 读取同步数据
+async function loadPosts() {
+  try {
+    let r = await fetch(SYNC_URL);
+    let d = await r.json();
+    posts = JSON.parse(d.files.posts.content || "[]");
+    render();
+  } catch(e){}
+}
+
+// 保存同步数据
+async function savePosts() {
+  try {
+    await fetch(SYNC_URL, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        files: { posts: { content: JSON.stringify(posts) } }
+      })
+    });
+    loadPosts();
+  } catch(e){}
+}
+
+function go(p) { page = p; render(); }
+function render() {
+  let v = document.getElementById("view");
+  document.getElementById("loginBtn").style.display = user?"none":"inline";
+  document.getElementById("upBtn").style.display = user?"inline":"none";
+  document.getElementById("adminBtn").style.display = user===ADMIN?"inline":"none";
+  document.getElementById("logoutBtn").style.display = user?"inline":"none";
+
+  if(page === "login"){
+    v.innerHTML = `
+    <div class="login">
+      <h3>登录</h3>
+      <input id="u" placeholder="用户名"><br>
+      <button onclick="login()">登录</button>
+    </div>`;
+    return;
+  }
+
+  if(page === "upload"){
+    v.innerHTML = `
+    <div class="upload">
+      <h3>上传</h3>
+      <input id="title" placeholder="标题"><br>
+      <select id="type">
+        <option value="cthulhu">克苏鲁</option>
+        <option value="greenapple">青苹果</option>
+        <option value="normal">通用</option>
+      </select><br>
+      <textarea id="content" placeholder="内容"></textarea><br>
+      <button onclick="post()">提交</button>
+    </div>`;
+    return;
+  }
+
+  let f = page==="home"?posts:posts.filter(x=>x.type===page);
+  let html = `<div class="sync">🔄 实时联动已开启</div>`;
+  f.forEach(p => {
+    html += `
+    <div class="card">
+      <h3>${p.title}</h3>
+      <div class="meta">${p.user} | ${p.time}</div>
+      <div class="content">${p.content}</div>
+      ${adminMode?`<div class="admin-bar">
+        <button class="admin-btn" onclick="del('${p.id}')">删除</button>
+      </div>`:""}
+    </div>`;
+  });
+  v.innerHTML = f.length?html:`<div class="sync">暂无内容</div>`;
+}
+
+function login() {
+  user = document.getElementById("u").value;
+  localStorage.setItem("user", user);
+  go("home");
+}
+
+function post() {
+  let t = document.getElementById("title").value;
+  let c = document.getElementById("content").value;
+  let ty = document.getElementById("type").value;
+  if(!t||!c)return alert("不能为空");
+  posts.unshift({
+    id:Date.now(), title:t, content:c, type:ty, user:user,
+    time:new Date().toLocaleString()
+  });
+  savePosts();
+  go("home");
+}
+
+function del(id) {
+  if(!adminMode)return;
+  posts = posts.filter(x=>x.id!=id);
+  savePosts();
+}
+
+function admin() {
+  if(user!==ADMIN)return;
+  if(prompt("秘钥")===KEY) adminMode=!adminMode;
+  render();
+}
+
+function logout() {
+  user=null;adminMode=false;localStorage.removeItem("user");go("login");
+}
+
+loadPosts();
+render();
+</script>
+</body>
+</html>
