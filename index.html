@@ -7,347 +7,42 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="renderer" content="webkit">
 <style>
-/* 全局样式 */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
-}
-
-body {
-  background: #0a0e17;
-  color: #e0e6ff;
-  min-height: 100vh;
-  background-image: radial-gradient(circle at 10% 20%, rgba(88, 166, 255, 0.05) 0%, transparent 90%);
-}
-
-/* 导航栏 */
-.nav {
-  background: rgba(18, 24, 34, 0.95);
-  backdrop-filter: blur(10px);
-  padding: 16px 20px;
-  border-bottom: 1px solid #2a3346;
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-}
-
-.nav .wrap {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.nav .title {
-  font-size: 22px;
-  font-weight: 700;
-  color: #58a6ff;
-  letter-spacing: 1px;
-}
-
-.nav a {
-  color: #a0a8c0;
-  text-decoration: none;
-  padding: 8px 0;
-  border-bottom: 2px solid transparent;
-  transition: all 0.3s ease;
-}
-
-.nav a:hover, .nav a.active {
-  color: #58a6ff;
-  border-color: #58a6ff;
-}
-
-.nav .right {
-  margin-left: auto;
-  display: flex;
-  gap: 16px;
-}
-
-/* 主容器 */
-.container {
-  max-width: 1200px;
-  margin: 30px auto;
-  padding: 0 20px;
-}
-
-/* 登录页 */
-.login {
-  max-width: 450px;
-  margin: 80px auto;
-  background: rgba(18, 24, 34, 0.85);
-  border: 1px solid #2a3346;
-  border-radius: 16px;
-  padding: 40px;
-  text-align: center;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(8px);
-}
-
-.login h2 {
-  color: #58a6ff;
-  margin-bottom: 25px;
-  font-size: 24px;
-}
-
-.login input {
-  width: 100%;
-  padding: 14px 16px;
-  margin: 10px 0;
-  background: rgba(10, 14, 23, 0.7);
-  border: 1px solid #2a3346;
-  border-radius: 8px;
-  color: #fff;
-  font-size: 15px;
-  transition: border-color 0.3s ease;
-  pointer-events: auto;
-  user-select: text;
-}
-
-.login input:focus {
-  outline: none;
-  border-color: #58a6ff;
-  box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.15);
-}
-
-.login button {
-  width: 100%;
-  padding: 14px;
-  background: #238636;
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  margin-top: 15px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background 0.3s ease;
-}
-
-.login button:hover {
-  background: #2ea043;
-}
-
-.login .dev {
-  margin-top: 25px;
-  color: #717d96;
-  font-size: 14px;
-}
-
-/* 卡片样式 */
-.card {
-  background: rgba(18, 24, 34, 0.85);
-  border: 1px solid #2a3346;
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 20px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-}
-
-.card .tag {
-  display: inline-block;
-  padding: 5px 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  margin-right: 10px;
-  font-weight: 500;
-}
-
-.tag-cthulhu {
-  background: #8957e5;
-  color: #fff;
-}
-
-.tag-greenapple {
-  background: #3fb950;
-  color: #fff;
-}
-
-.tag-normal {
-  background: #58a6ff;
-  color: #fff;
-}
-
-.card h3 {
-  margin: 12px 0;
-  color: #fff;
-  font-size: 20px;
-}
-
-.card .meta {
-  color: #717d96;
-  font-size: 14px;
-  margin-bottom: 12px;
-}
-
-.card .content {
-  color: #c9d1d9;
-  line-height: 1.8;
-  white-space: pre-wrap;
-  font-size: 15px;
-}
-
-.card img {
-  max-width: 100%;
-  border-radius: 8px;
-  margin-top: 15px;
-  max-height: 450px;
-  object-fit: contain;
-  border: 1px solid #2a3346;
-}
-
-/* 上传页 */
-.upload {
-  background: rgba(18, 24, 34, 0.85);
-  border: 1px solid #2a3346;
-  border-radius: 16px;
-  padding: 35px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-}
-
-.upload h2 {
-  color: #58a6ff;
-  margin-bottom: 25px;
-  font-size: 22px;
-}
-
-.upload .item {
-  margin-bottom: 20px;
-}
-
-.upload label {
-  display: block;
-  margin-bottom: 8px;
-  color: #c9d1d9;
-  font-weight: 500;
-}
-
-.upload input, .upload textarea, .upload select {
-  width: 100%;
-  padding: 14px 16px;
-  background: rgba(10, 14, 23, 0.7);
-  border: 1px solid #2a3346;
-  border-radius: 8px;
-  color: #fff;
-  font-size: 15px;
-  transition: border-color 0.3s ease;
-  pointer-events: auto;
-  user-select: text;
-}
-
-.upload input:focus, .upload textarea:focus, .upload select:focus {
-  outline: none;
-  border-color: #58a6ff;
-  box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.15);
-}
-
-.upload textarea {
-  min-height: 200px;
-  resize: vertical;
-  line-height: 1.6;
-}
-
-.upload button {
-  padding: 14px 30px;
-  background: #238636;
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background 0.3s ease;
-}
-
-.upload button:hover {
-  background: #2ea043;
-}
-
-/* 空状态 */
-.empty {
-  text-align: center;
-  padding: 80px 20px;
-  color: #717d96;
-}
-
-.empty p {
-  font-size: 18px;
-  margin-bottom: 15px;
-}
-
-.empty span {
-  font-size: 14px;
-  color: #94a3b8;
-}
-
-/* 管理员按钮 */
-.admin-bar {
-  margin-top: 15px;
-  display: flex;
-  gap: 10px;
-}
-
-.admin-btn {
-  background: #d32f2f;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.admin-btn:hover {
-  background: #b91c1c;
-}
-
-.ban-btn {
-  background: #f57c00;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.ban-btn:hover {
-  background: #e67400;
-}
-
-/* 同步提示 */
-.sync-tip {
-  text-align: center;
-  color: #4ade80;
-  margin: 15px 0;
-  font-size: 15px;
-  padding: 10px;
-  background: rgba(74, 222, 128, 0.1);
-  border-radius: 8px;
-  border: 1px solid rgba(74, 222, 128, 0.2);
-}
-
-/* QQ浏览器兼容 */
-input, textarea, select {
-  -webkit-user-select: text !important;
-  user-select: text !important;
-  pointer-events: auto !important;
-}
-
-/* 响应式 */
-@media (max-width: 768px) {
-  .nav .wrap { gap: 12px; }
-  .login, .upload { padding: 25px; margin: 40px auto; }
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 微软雅黑, Microsoft YaHei, sans-serif; }
+body { background: #0b0f17; color: #e6e6e6; min-height: 100vh; }
+.nav { background: #121822; padding: 14px 20px; border-bottom: 1px solid #242a36; position: sticky; top: 0; z-index: 99; }
+.nav .wrap { max-width: 1000px; margin: 0 auto; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.nav .title { font-size: 20px; font-weight: 700; color: #58a6ff; }
+.nav a { color: #aaa; text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent; }
+.nav a.active { color: #58a6ff; border-color: #58a6ff; }
+.nav .right { margin-left: auto; display: flex; gap: 12px; }
+.container { max-width: 1000px; margin: 20px auto; padding: 0 20px; }
+.login { max-width: 420px; margin: 60px auto; background: #121822; border: 1px solid #242a36; border-radius: 12px; padding: 30px; text-align: center; }
+.login h2 { color: #58a6ff; margin-bottom: 20px; }
+.login input { width: 100%; padding: 12px; margin: 8px 0; background: #0b0f17; border: 1px solid #242a36; border-radius: 6px; color: #fff; pointer-events: auto; user-select: text; }
+.login button { width: 100%; padding: 12px; background: #238636; border: none; border-radius: 6px; color: #fff; margin-top: 10px; cursor: pointer; }
+.login .dev { margin-top: 20px; color: #666; font-size: 13px; }
+.card { background: #121822; border: 1px solid #242a36; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+.card .tag { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 12px; margin-right: 8px; }
+.tag-cthulhu { background: #8957e5; color: #fff; }
+.tag-greenapple { background: #3fb950; color: #fff; }
+.tag-normal { background: #58a6ff; color: #fff; }
+.card h3 { margin: 10px 0; color: #fff; }
+.card .meta { color: #777; font-size: 13px; margin-bottom: 10px; }
+.card .content { color: #ccc; line-height: 1.7; white-space: pre-wrap; }
+.card img { max-width: 100%; border-radius: 6px; margin-top: 10px; max-height: 400px; object-fit: contain; }
+.upload { background: #121822; border: 1px solid #242a36; border-radius: 12px; padding: 30px; }
+.upload h2 { color: #58a6ff; margin-bottom: 20px; }
+.upload .item { margin-bottom: 18px; }
+.upload label { display: block; margin-bottom: 6px; }
+.upload input, .upload textarea, .upload select { width: 100%; padding: 12px; background: #0b0f17; border: 1px solid #242a36; border-radius: 6px; color: #fff; pointer-events: auto; user-select: text; }
+.upload textarea { min-height: 180px; resize: vertical; }
+.upload button { padding: 12px 30px; background: #238636; border: none; border-radius: 6px; color: #fff; cursor: pointer; }
+.empty { text-align: center; padding: 60px 20px; color: #666; }
+.admin-bar { margin-top: 12px; display: flex; gap: 8px; }
+.admin-btn { background: #d32f2f; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+.ban-btn { background: #f57c00; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+.sync-tip { text-align: center; color: #4ade80; margin: 10px 0; font-size: 14px; }
+input, textarea, select { -webkit-user-select: text !important; user-select: text !important; pointer-events: auto !important; }
 </style>
 </head>
 <body>
@@ -370,16 +65,14 @@ input, textarea, select {
 
 <div class="container" id="view"></div>
 
-<!-- 在线同步核心：JSONBin 免费云端存储（QQ浏览器完美兼容） -->
 <script>
-// 唯一公共存储（所有人共用，真正联机）
+// 在线同步核心：JSONBin 免费云端存储（跨设备联机）
 const BIN_ID = "6607f2e4acd3cb34a88f0a52";
 const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
 const UPDATE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 const ADMIN_KEY = "susu";
 const ADMIN_NAME = "susu";
 
-// 全局状态
 let currentUser = localStorage.getItem("user") || null;
 let adminMode = false;
 let banned = JSON.parse(localStorage.getItem("banned") || "[]");
@@ -395,9 +88,9 @@ async function fetchPosts() {
     const res = await fetch(API_URL);
     const data = await res.json();
     posts = data.record.posts || [];
+    localStorage.setItem("local_posts", JSON.stringify(posts));
     render(currentPage);
   } catch (e) {
-    console.error("同步失败，使用本地缓存", e);
     posts = JSON.parse(localStorage.getItem("local_posts") || "[]");
     render(currentPage);
   }
@@ -411,10 +104,8 @@ async function savePosts() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ posts: posts })
     });
-    localStorage.setItem("local_posts", JSON.stringify(posts));
     fetchPosts();
   } catch (e) {
-    console.error("保存失败，使用本地存储", e);
     localStorage.setItem("local_posts", JSON.stringify(posts));
     render(currentPage);
   }
@@ -485,11 +176,7 @@ function render(page) {
   const filteredPosts = page === "home" ? posts : posts.filter(post => post.type === page);
   
   if (filteredPosts.length === 0) {
-    view.innerHTML = `
-    <div class="empty">
-      <p>暂无收录的异常档案</p>
-      <span>快来上传第一个档案吧！</span>
-    </div>`;
+    view.innerHTML = `<div class="empty">暂无收录的异常档案</div>`;
     return;
   }
   
@@ -527,7 +214,7 @@ function render(page) {
 function login() {
   const username = document.getElementById("user").value.trim();
   if (!username) return alert("请输入用户名！");
-  if (banned.includes(username)) return alert("该账号已被封禁！");
+  if (banned.includes(username)) return alert("该账号已被管理员封禁，无法登录！");
   
   currentUser = username;
   localStorage.setItem("user", username);
@@ -605,7 +292,7 @@ function banUser(username) {
   }
 }
 
-// 管理员模式
+// 切换管理员模式
 function toggleAdmin() {
   if (currentUser !== ADMIN_NAME) return alert("仅管理员susu可进入！");
   const key = prompt("请输入管理员秘钥：");
@@ -614,7 +301,7 @@ function toggleAdmin() {
     alert(`管理员模式：${adminMode ? "✅ 开启" : "❌ 关闭"}`);
     render(currentPage);
   } else {
-    alert("秘钥错误！");
+    alert("秘钥错误！管理员秘钥是susu");
   }
 }
 
@@ -628,19 +315,14 @@ function updateNavbar() {
 
 // 初始化
 document.addEventListener("DOMContentLoaded", () => {
-  // 绑定导航事件
   document.querySelectorAll(".page").forEach(link => {
     link.addEventListener("click", (e) => {
       e.preventDefault();
       render(link.dataset.target);
     });
   });
-  
-  // 绑定管理员/退出按钮
   document.getElementById("adminBtn").addEventListener("click", toggleAdmin);
   document.getElementById("logoutBtn").addEventListener("click", logout);
-  
-  // 初始化UI
   updateNavbar();
   fetchPosts();
 });
